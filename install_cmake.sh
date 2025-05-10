@@ -98,9 +98,16 @@ cd "cmake-${CMAKE_VERSION}" || { echo "Failed to change to extracted directory";
 # Prepare installation directory
 mkdir -p "$INSTALL_PREFIX" || { echo "Failed to create installation directory"; rm -rf "$TEMP_DIR"; exit 1; }
 
-# Convert to absolute path if needed
-INSTALL_PREFIX=$(cd "$INSTALL_PREFIX" && pwd)
-echo "Will install to: $INSTALL_PREFIX"
+# Store the original installation path as provided by the user
+ORIGINAL_INSTALL_PREFIX="$INSTALL_PREFIX"
+
+# Convert to absolute path only if it's needed for the build process
+if [[ "$INSTALL_PREFIX" != /* ]]; then
+  # For relative paths, construct the absolute path from the current working directory
+  INSTALL_PREFIX="$(pwd)/$INSTALL_PREFIX"
+fi
+
+echo "Will install to: $ORIGINAL_INSTALL_PREFIX (absolute path: $INSTALL_PREFIX)"
 
 # Bootstrap and build
 echo "Configuring CMake..."
@@ -138,4 +145,4 @@ if ! "$INSTALL_PREFIX/bin/cmake" --version; then
   exit 1
 fi
 
-echo "CMake $CMAKE_VERSION has been successfully installed to $INSTALL_PREFIX"
+echo "CMake $CMAKE_VERSION has been successfully installed to $ORIGINAL_INSTALL_PREFIX"
