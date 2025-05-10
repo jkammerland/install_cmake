@@ -141,9 +141,13 @@ fi
 echo "Cleaning up temporary directory..."
 rm -rf "$TEMP_DIR"
 
-# Verify installation
+# Before the verification step
+echo "Returning to original directory..."
+cd "$ORIGINAL_WORKING_DIR" || { echo "Failed to return to original directory"; exit 1; }
+
+# Then verify
 echo "Verifying installation..."
-if ! (cd "$(dirname "$0")" && "$INSTALL_PREFIX/bin/cmake" --version); then
+if ! "$INSTALL_PREFIX/bin/cmake" --version; then
   echo "Error: Failed to verify CMake installation."
   exit 1
 fi
