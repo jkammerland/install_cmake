@@ -5,6 +5,9 @@
 # Exit on any error
 set -e
 
+# Save the original working directory
+ORIGINAL_WORKING_DIR="$(pwd)"
+
 # Default values
 CMAKE_VERSION=""
 INSTALL_PREFIX="./cmake"
@@ -96,15 +99,15 @@ fi
 cd "cmake-${CMAKE_VERSION}" || { echo "Failed to change to extracted directory"; rm -rf "$TEMP_DIR"; exit 1; }
 
 # Prepare installation directory
-mkdir -p "$INSTALL_PREFIX" || { echo "Failed to create installation directory"; rm -rf "$TEMP_DIR"; exit 1; }
+mkdir -p "$ORIGINAL_WORKING_DIR/$INSTALL_PREFIX" || { echo "Failed to create installation directory"; rm -rf "$TEMP_DIR"; exit 1; }
 
 # Store the original installation path as provided by the user
 ORIGINAL_INSTALL_PREFIX="$INSTALL_PREFIX"
 
 # Convert to absolute path only if it's needed for the build process
 if [[ "$INSTALL_PREFIX" != /* ]]; then
-  # For relative paths, construct the absolute path from the current working directory
-  INSTALL_PREFIX="$(pwd)/$INSTALL_PREFIX"
+  # For relative paths, construct the absolute path from the ORIGINAL working directory
+  INSTALL_PREFIX="$ORIGINAL_WORKING_DIR/$INSTALL_PREFIX"
 fi
 
 echo "Will install to: $ORIGINAL_INSTALL_PREFIX (absolute path: $INSTALL_PREFIX)"
