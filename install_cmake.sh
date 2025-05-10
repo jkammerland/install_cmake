@@ -143,9 +143,10 @@ rm -rf "$TEMP_DIR"
 
 # Verify installation
 echo "Verifying installation..."
-if ! "$INSTALL_PREFIX/bin/cmake" --version; then
+if ! (cd "$(dirname "$0")" && "$INSTALL_PREFIX/bin/cmake" --version); then
   echo "Error: Failed to verify CMake installation."
   exit 1
 fi
 
+cd "$ORIGINAL_WORKING_DIR"
 echo "CMake $CMAKE_VERSION has been successfully installed to $ORIGINAL_INSTALL_PREFIX"
