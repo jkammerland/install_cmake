@@ -12,6 +12,11 @@ A simple bash script to install a specific version of CMake from source.
 ./install_cmake.sh -v 4.0.2 -d ./cmake-4.0.2
 ```
 
+Without cloning the repository, you can also download download and pipe it with arguments directly:
+```bash
+curl -fsSL https://raw.githubusercontent.com/jkammerland/install_cmake/master/install_cmake.sh | bash -s -- -v 4.0.2 -d ./cmake-4.0.2
+```
+
 ## Requirements
 - `curl`
 - `tar`
